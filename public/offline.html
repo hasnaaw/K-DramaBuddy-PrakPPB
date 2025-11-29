@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anda Sedang Offline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-md p-8 bg-white rounded-xl shadow-2xl text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m2.541-1.414A10 10 0 0112 21a10 10 0 01-5.657-1.657M12 3a9.75 9.75 0 00-6.177 2.215M12 3v18" />
+        </svg>
+        <h1 class="text-3xl font-bold mb-2 text-gray-900">Ooops! Anda Offline.</h1>
+        <p class="text-gray-600 mb-6">Sepertinya koneksi internet Anda terputus. Beberapa konten mungkin tidak dapat dimuat.</p>
+        <a href="/" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md">
+            Coba Muat Ulang Halaman
+        </a>
+    </div>
+</body>
+</html>
