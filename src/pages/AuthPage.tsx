@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Header } from '../components/ui/Layouts';
-import { useAuth } from '../auth/AuthProvider';
-import { supabase } from '../supabaseClient';
+import { Header } from '../components/ui/Layouts.tsx';
+import { useAuth } from '../auth/AuthProvider.tsx';
+import { supabase } from '../supabaseClient.ts';
 
 interface AuthFormProps {
     mode: 'login' | 'signup';

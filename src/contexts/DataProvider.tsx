@@ -1,11 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import type { ReactNode } from 'react';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../auth/AuthProvider';
 
-// Asumsi Tipe Data Dasar
-// [DRAMA TYPE REDACTED FOR BREVITY]
-
-interface Drama {
+// PERBAIKAN: Semua interface utama harus diekspor (export) agar bisa diimpor oleh file lain.
+export interface Drama {
     id: string;
     title: string;
     poster_url: string;
@@ -16,7 +15,7 @@ interface Drama {
     avg_rating: number; // Nilai yang dihitung
 }
 
-interface Review {
+export interface Review {
     id: string;
     user_id: string;
     drama_id: string;
@@ -25,7 +24,7 @@ interface Review {
     created_at: string;
 }
 
-interface Favorite {
+export interface Favorite {
     user_id: string;
     drama_id: string;
 }
@@ -60,11 +59,11 @@ export const useData = () => {
 };
 
 interface DataProviderProps {
-    children: ReactNode; // Import ReactNode
+    children: ReactNode;
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
-    const { userId, isGuest } = useAuth();
+    const { userId, isGuest } = useAuth(); 
     
     const [kdramas, setKdramas] = useState<Drama[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);

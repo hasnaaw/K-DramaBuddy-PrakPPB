@@ -1,15 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-// Asumsi tipe dasar Drama dari DataProvider
-interface Drama {
-    id: string;
-    title: string;
-    poster_url: string;
-    year: number;
-    avg_rating: number; 
-    // Tambahkan properti lain yang diperlukan jika ada
-}
+import type { Drama } from '../../contexts/DataProvider'; 
 
 // Icon Bintang (Utility)
 const StarIcon: React.FC<{ fill: boolean, size?: number, color?: string }> = ({ fill, size = 16, color = 'text-yellow-400' }) => (
@@ -28,13 +19,16 @@ export const KramaCard: React.FC<KramaCardProps> = ({ kdrama }) => {
     const { id, title, poster_url, year, avg_rating } = kdrama;
     const rating = avg_rating || 0;
 
+    // Perbaikan: Tambahkan min-w-0 dan pastikan Link adalah block
     return (
-        <Link to={`/detail/${id}`} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden transform hover:-translate-y-1 block">
+        <Link to={`/detail/${id}`} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden transform hover:-translate-y-1 block min-w-0">
+            {/* Kontainer Gambar: Tentukan tinggi H-60 secara eksplisit */}
             <div className="relative h-60 w-full">
                 <img
                     src={poster_url}
                     alt={`Poster ${title}`}
-                    className="w-full h-full object-cover"
+                    // PERBAIKAN: object-cover memastikan gambar tidak memuai kontainer
+                    className="w-full h-full object-cover" 
                     onError={(e: any) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x450/374151/FFFFFF?text=No+Poster"; }}
                 />
             </div>
@@ -59,7 +53,6 @@ interface AdminKramaCardProps {
 
 // Komponen Card Khusus untuk Halaman List (dengan tombol CRUD)
 export const AdminKramaCard: React.FC<AdminKramaCardProps> = ({ kdrama, onEdit, onDelete }) => {
-    // Tombol CRUD ini selalu terlihat sesuai permintaan Anda agar Guest bisa memodifikasi data.
     
     return (
         <div className="flex flex-col">

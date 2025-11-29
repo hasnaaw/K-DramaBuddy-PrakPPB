@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle } from '../components/ui/Layouts';
-import { useAuth } from '../auth/AuthProvider';
-import { ReviewModal } from '../components/modals/ReviewModal';
+import { DataContext } from '../contexts/DataProvider.tsx';
+import { Header, SectionTitle } from '../components/ui/Layouts.tsx';
+import { useAuth } from '../auth/AuthProvider.tsx';
+import { ReviewModal } from '../components/modals/ReviewModal.tsx'; // PERBAIKAN: Memperbaiki import path
 
 // Asumsi tipe dasar
 interface Review {
@@ -110,7 +110,6 @@ const CommunityReviewPage: React.FC = () => {
                     <ReviewItem
                         key={review.id}
                         review={review}
-                        // Gunakan pengecekan userId untuk menentukan kepemilikan
                         isOwnReview={review.user_id === userId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}

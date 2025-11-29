@@ -1,7 +1,6 @@
-/* Direktif Tailwind Wajib */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+
+@import "tailwindcss";
 
 /* Opsional: Terapkan font Inter ke elemen root */
 @layer base {

@@ -1,20 +1,21 @@
 import React, { useContext, useState } from 'react';
-import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts';
-import { AdminKramaCard } from '../components/ui/KdramaCard';
-import { KdramaFormModal } from '../components/modals/KdramaFormModal';
+import { DataContext } from '../contexts/DataProvider.tsx';
+import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts.tsx';
+import { AdminKramaCard } from '../components/ui/KdramaCard.tsx';
+import { KdramaFormModal } from '../components/modals/KdramaFormModal.tsx';
+import type { Drama } from '../contexts/DataProvider.tsx'; // PERBAIKAN: Import tipe Drama dari DataProvider
 
-// Asumsi tipe Drama diimport dari DataProvider
-interface Drama {
-    id: string;
-    title: string;
-    poster_url: string;
-    year: number;
-    genre: string[];
-    actors: string[];
-    description: string;
-    avg_rating: number;
-}
+// DEFINISI INI DIHAPUS karena sekarang diimpor dari DataProvider
+// interface Drama {
+//     id: string;
+//     title: string;
+//     poster_url: string;
+//     year: number;
+//     genre: string[]; 
+//     actors: string[]; 
+//     description: string; 
+//     avg_rating: number;
+// }
 
 
 const ListKdramaPage: React.FC = () => {
@@ -27,6 +28,7 @@ const ListKdramaPage: React.FC = () => {
 
     // --- Logika CRUD ---
     
+    // PERBAIKAN: Menggunakan tipe Partial<Drama> yang diimpor
     const handleFormSubmit = async (dramaData: Partial<Drama>) => {
         setSubmissionError(null);
         setIsSubmitting(true);
@@ -41,6 +43,7 @@ const ListKdramaPage: React.FC = () => {
         }
     }
     
+    // PERBAIKAN: Menggunakan tipe Drama yang diimpor
     const handleEdit = (drama: Drama) => {
         setEditingDrama(drama);
         setIsFormModalOpen(true);
@@ -49,11 +52,10 @@ const ListKdramaPage: React.FC = () => {
     
     const handleDelete = async (dramaId: string) => {
         setSubmissionError(null);
-        // Konfirmasi sudah dihandle di DataProvider, kita hanya menunggu hasilnya
         const result = await deleteKdrama(dramaId);
         
         if (result.error) {
-            setSubmissionError(result.error);
+            setSubmissionError(result.error || 'Gagal menghapus K-Drama.');
         }
     }
     
@@ -99,7 +101,7 @@ const ListKdramaPage: React.FC = () => {
                             <AdminKramaCard 
                                 key={drama.id} 
                                 kdrama={drama} 
-                                onEdit={handleEdit}
+                                onEdit={handleEdit} // Di sini, tipe Drama sudah sesuai
                                 onDelete={handleDelete}
                             />
                         ))

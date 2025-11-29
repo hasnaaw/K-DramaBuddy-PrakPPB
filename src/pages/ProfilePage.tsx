@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../auth/AuthProvider';
-import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle } from '../components/ui/Layouts';
-import { ReviewModal } from '../components/modals/ReviewModal';
+import { useAuth } from '../auth/AuthProvider.tsx';
+import { DataContext } from '../contexts/DataProvider.tsx';
+import { Header, SectionTitle } from '../components/ui/Layouts.tsx';
+import { ReviewModal } from '../components/modals/ReviewModal.tsx';
 
 // Asumsi tipe dasar
 interface Review {

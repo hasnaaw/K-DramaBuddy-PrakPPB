@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts';
-import { ReviewModal } from '../components/modals/ReviewModal';
-import { useAuth } from '../auth/AuthProvider';
+import { DataContext } from '../contexts/DataProvider.tsx';
+import { Header, SectionTitle } from '../components/ui/Layouts.tsx'; 
+import { ReviewModal } from '../components/modals/ReviewModal.tsx'; // PERBAIKAN: Memperbaiki import path
+import { useAuth } from '../auth/AuthProvider.tsx';
 
 // Asumsi tipe dasar
 interface Review {
@@ -64,7 +64,7 @@ const KdramaDetailPage: React.FC = () => {
 
     const isFavorite = favorites.some(fav => fav.drama_id === id && fav.user_id === userId);
     const avgRating = drama?.avg_rating || 0;
-    const totalEpisodes = 16; 
+    // const totalEpisodes = 16; // Dihapus karena unused
     const duration = '60-70 menit';
 
     if (dataLoading) return (
@@ -84,7 +84,6 @@ const KdramaDetailPage: React.FC = () => {
         const result = await addOrUpdateReview({ 
             ...reviewData, 
             drama_id: id,
-            // user_id dan user_email otomatis ditambahkan di DataProvider
         });
 
         setIsSubmitting(false);
@@ -117,7 +116,7 @@ const KdramaDetailPage: React.FC = () => {
             return;
         }
         setIsTogglingFavorite(true);
-        const result = await addOrRemoveFavorite(id);
+        const result = await addOrRemoveFavorite(drama.id);
         setIsTogglingFavorite(false);
         
         if (result.error) {
@@ -170,8 +169,8 @@ const KdramaDetailPage: React.FC = () => {
                             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                         </svg>
                     </button>
+                    
                 </div>
-                
                 <div className="md:w-2/3">
                     {/* Metadata Drama */}
                     <h2 className="text-3xl font-extrabold mb-2 text-gray-900 dark:text-white">{drama.title}</h2>
@@ -184,10 +183,16 @@ const KdramaDetailPage: React.FC = () => {
                     </div>
 
                     <p className="text-md mb-4 text-gray-700 dark:text-gray-300 font-medium">
+                        <span className="font-bold">Genre:</span> {drama.genre.join(', ')}
+                    </p>
+                    <p className="text-md mb-4 text-gray-700 dark:text-gray-300 font-medium">
                         <span className="font-bold">Pemeran Utama:</span> {renderActors(drama.actors)}
                     </p>
+                    <p className="text-md mb-4 text-gray-700 dark:text-gray-300 font-medium">
+                        <span className="font-bold">Tahun Rilis:</span> {drama.year}
+                    </p>
                     <p className="text-md mb-6 text-gray-700 dark:text-gray-300 font-medium">
-                        <span className="font-bold">Durasi/Episode:</span> {duration} ({totalEpisodes} Eps)
+                        <span className="font-bold">Durasi/Episode:</span> {duration} (16 Eps)
                     </p>
 
                     <SectionTitle title="Sinopsis" />

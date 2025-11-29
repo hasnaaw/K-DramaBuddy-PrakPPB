@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../contexts/DataProvider';
 import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts';
-import { KramaCard } from '../components/ui/KdramaCard'; // Asumsi komponen card dibuat di 5.4
+import { KramaCard } from '../components/ui/KdramaCard'; 
 
 const HomePage: React.FC = () => {
     const { kdramas, dataLoading } = useData();
@@ -24,6 +24,7 @@ const HomePage: React.FC = () => {
                     {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
             ) : (
+                // PERBAIKAN: Kontainer grid yang benar
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {newestKdramas.map(drama => <KramaCard key={drama.id} kdrama={drama} />)}
                 </div>

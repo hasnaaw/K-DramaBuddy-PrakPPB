@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts';
-import { KramaCard } from '../components/ui/KdramaCard';
+import { DataContext } from '../contexts/DataProvider.tsx';
+import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts.tsx';
+import { KramaCard } from '../components/ui/KdramaCard.tsx';
 
 const ActorDetailPage: React.FC = () => {
     const { actorName } = useParams<{ actorName: string }>();

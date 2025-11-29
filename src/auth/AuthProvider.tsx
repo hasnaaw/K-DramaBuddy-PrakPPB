@@ -1,6 +1,7 @@
-import React, { useState, useEffect, createContext, ReactNode, useCallback, useContext } from 'react';
+import React, { useState, useEffect, createContext, useCallback, useContext } from 'react';
+import type { ReactNode } from 'react'; // Menggunakan type-only import
 import { supabase } from '../supabaseClient';
-import { User } from '@supabase/supabase-js'; // Import tipe User dari Supabase
+import type { User } from '@supabase/supabase-js'; // Menggunakan type-only import
 
 // Mendefinisikan Tipe Context
 interface AuthContextType {
@@ -10,12 +11,10 @@ interface AuthContextType {
     isGuest: boolean;
     loading: boolean;
     login: (email: string, password: string) => Promise<{ error: string | null }>;
-    // Tambahkan signUp
     signUp: (email: string, password: string) => Promise<{ error: string | null }>;
     logout: () => Promise<void>;
 }
 
-// Tambahkan default value agar tidak undefined
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Hook kustom untuk menggunakan konteks Auth
@@ -35,28 +34,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Otentikasi saat aplikasi dimuat atau status berubah
     useEffect(() => {
-        // Mendapatkan sesi pengguna saat ini
         supabase.auth.getSession().then(({ data: { session } }) => {
             setUser(session?.user ?? null);
             setLoading(false);
         });
 
-        // Mendengarkan perubahan status otentikasi (login, logout)
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
             setLoading(false);
         });
 
-        // Cleanup subscription
         return () => {
             subscription?.unsubscribe();
         };
     }, []);
 
-
-    // --- Fungsi Otentikasi ---
 
     const login = useCallback(async (email: string, password: string) => {
         setLoading(true);
@@ -78,7 +71,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setLoading(false);
     }, []);
     
-    // --- Hitung Status User ---
     const isGuest = !user; 
     const userId = user?.id ?? null;
     const userEmail = user?.email ?? null;
@@ -90,7 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isGuest,
         loading,
         login,
-        signUp, // Ditambahkan
+        signUp,
         logout,
     };
 

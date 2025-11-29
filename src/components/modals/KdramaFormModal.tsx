@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Asumsi tipe dasar
 interface Drama {
@@ -24,8 +24,9 @@ const GENRES_LIST = ['Romance', 'Comedy', 'Thriller', 'Revenge', 'Legal', 'Survi
 
 export const KdramaFormModal: React.FC<KdramaFormModalProps> = ({ isOpen, onClose, onSubmit, isSubmitting, initialDrama }) => {
     
+    // Menggunakan string untuk state year agar kompatibel dengan input type="number"
     const [title, setTitle] = useState(initialDrama?.title || '');
-    const [year, setYear] = useState(initialDrama?.year || new Date().getFullYear());
+    const [year, setYear] = useState(String(initialDrama?.year || new Date().getFullYear())); // COERCION STRING
     const [description, setDescription] = useState(initialDrama?.description || '');
     const [posterUrl, setPosterUrl] = useState(initialDrama?.poster_url || '');
     const [genres, setGenres] = useState(initialDrama?.genre || []);
@@ -38,7 +39,7 @@ export const KdramaFormModal: React.FC<KdramaFormModalProps> = ({ isOpen, onClos
     useEffect(() => {
         if (isOpen) {
             setTitle(initialDrama?.title || '');
-            setYear(initialDrama?.year || new Date().getFullYear());
+            setYear(String(initialDrama?.year || new Date().getFullYear())); // COERCION STRING
             setDescription(initialDrama?.description || '');
             setPosterUrl(initialDrama?.poster_url || '');
             setGenres(initialDrama?.genre || []);
@@ -71,23 +72,17 @@ export const KdramaFormModal: React.FC<KdramaFormModalProps> = ({ isOpen, onClos
         
         let finalPosterUrl = posterUrl;
         
-        // ************************************************
-        // CATATAN PENTING UNTUK IMPLEMENTASI NYATA:
-        // Di sini, Anda harus mengunggah `posterFile` ke Supabase Storage
-        // dan mendapatkan URL publiknya. Karena ini simulasi, kita lewati.
-        // ************************************************
-        
-        // Fallback untuk simulasi: Jika ada file baru, gunakan URL placeholder, 
-        // jika tidak, gunakan posterUrl yang sudah ada.
         if (posterFile) {
             finalPosterUrl = 'https://placehold.co/300x450/0D9488/FFFFFF?text=USER+UPLOAD';
         }
 
+        // PERBAIKAN UTAMA: Mengkonversi string 'year' menjadi number sebelum disubmit
+        const submittedYear = parseInt(year);
 
         onSubmit({
             id: initialDrama?.id, 
             title,
-            year: parseInt(year as unknown as string), // Pastikan tahun adalah number
+            year: submittedYear, // Menggunakan nilai yang sudah diconvert
             description,
             poster_url: finalPosterUrl,
             genre: genres,
@@ -113,7 +108,14 @@ export const KdramaFormModal: React.FC<KdramaFormModalProps> = ({ isOpen, onClos
                     
                     <input type="text" placeholder="Judul K-Drama (Wajib)" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white" />
                     
-                    <input type="number" placeholder="Tahun Rilis (Wajib)" value={year} onChange={(e) => setYear(parseInt(e.target.value) || new Date().getFullYear())} required min="1990" max={new Date().getFullYear() + 1} className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white" />
+                    <input 
+                        type="number" 
+                        placeholder="Tahun Rilis (Wajib)" 
+                        value={year} // Sekarang year adalah string
+                        onChange={(e) => setYear(e.target.value)} // Update state sebagai string
+                        required min="1990" max={new Date().getFullYear() + 1} 
+                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white" 
+                    />
 
                     {/* FIELD UPLOAD GAMBAR */}
                     <div>
@@ -134,7 +136,7 @@ export const KdramaFormModal: React.FC<KdramaFormModalProps> = ({ isOpen, onClos
                     </div>
                     {/* END FIELD UPLOAD GAMBAR */}
 
-                    <textarea placeholder="Sinopsis/Deskripsi (Wajib)" value={description} onChange={(e) => setDescription(e.target.value)} required rows="3" className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white" />
+                    <textarea placeholder="Sinopsis/Deskripsi (Wajib)" value={description} onChange={(e) => setDescription(e.target.value)} required rows={3} className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white" />
                     
                     <input type="text" placeholder="Pemeran Utama (Pisahkan dengan koma: Aktor A, Aktor B)" value={actors} onChange={(e) => setActors(e.target.value)} className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white" />
 

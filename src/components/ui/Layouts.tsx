@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useNetworkStatus } from '../../hooks/useNetworkStatus';
-import { useAuth } from '../../auth/AuthProvider';
+import React from 'react';
+import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom'; // useLocation dihapus
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'; // Dibiarkan karena digunakan di NetworkStatusBanner
+
 
 // ------------------------------------------------------------------
 // A. ICON & BUTTONS UTILITY
@@ -31,7 +32,6 @@ interface NavItemProps {
 }
 
 const NavItem: React.FC<NavItemProps> = ({ to, icon, label, currentPath }) => {
-    // Membandingkan rute dasar (misalnya '/detail' vs '/detail/1')
     const isActive = currentPath === to.replace('/', '');
     const activeClass = isActive
         ? 'text-white bg-blue-600 dark:bg-blue-400 dark:text-gray-900 shadow-md'
@@ -55,7 +55,8 @@ interface BottomNavbarProps {
 }
 
 export const BottomNavbar: React.FC<BottomNavbarProps> = ({ currentPath, toggleTheme, isDark, isGuest }) => {
-    
+    // isGuest sudah diterima sebagai props, tidak perlu useAuth lagi.
+
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-700">
             <nav className="max-w-xl mx-auto flex justify-around h-16 pt-2 pb-1">
@@ -91,8 +92,8 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title, showBack = false }) => {
-    const location = useLocation();
-
+    // useLocation dihapus karena tidak digunakan
+    
     const handleBack = (e: React.MouseEvent) => {
         e.preventDefault();
         window.history.back();
@@ -117,8 +118,7 @@ interface NetworkStatusBannerProps {
 }
 
 export const NetworkStatusBanner: React.FC<NetworkStatusBannerProps> = ({ isOnline }) => {
-    // Menggunakan useLocation untuk memaksa re-render jika rute berubah saat offline (UX)
-    useLocation(); 
+    // useLocation dihapus karena tidak digunakan
     
     if (isOnline) return null;
 
