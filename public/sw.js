@@ -47,10 +47,14 @@ self.addEventListener('activate', (event) => {
 
 // Event: Fetch (Strategi Cache-First dengan Network Fallback)
 self.addEventListener('fetch', (event) => {
-    // Hanya tangani permintaan HTTP/S
-    if (!event.request.url.startsWith('http')) {
-        return;
-    }
+  // --- TAMBAHKAN KODE INI DI BAGIAN PALING ATAS ---
+  
+  // Jangan cache request development (Vite/React Refresh)
+  if (event.request.url.includes('@react-refresh') || 
+      event.request.url.includes('hot-update') ||
+      !event.request.url.startsWith('http')) {
+      return; 
+  }
 
     event.respondWith(
         caches.match(event.request)

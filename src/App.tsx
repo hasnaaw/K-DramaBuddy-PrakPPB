@@ -5,7 +5,7 @@ import { DataProvider } from './contexts/DataProvider';
 import { useTheme } from './hooks/useTheme';
 import { useNetworkStatus } from './hooks/useNetworkStatus';
 // Import Komponen UI Dasar
-import { BottomNavbar, NetworkStatusBanner } from './components/ui/Layouts'; // Header dihapus dari import karena tidak digunakan di sini, hanya di Layouts.tsx
+import { BottomNavbar, NetworkStatusBanner } from './components/ui/Layouts'; 
 // Import Halaman
 import HomePage from './pages/HomePage'; 
 import ListKdramaPage from './pages/ListKdramaPage';
@@ -40,6 +40,7 @@ const Layout = () => {
             {/* Network Status Banner (Hanya muncul jika offline) */}
             <NetworkStatusBanner isOnline={isOnline} />
 
+            {/* PERBAIKAN: Menghapus max-w-xl agar konten mengisi lebar device */}
             <main className="max-w-xl mx-auto pb-16">
                 
                 {/* Definisikan semua rute di sini */}

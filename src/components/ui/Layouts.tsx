@@ -1,8 +1,7 @@
 import React from 'react';
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom'; // useLocation dihapus
-import { useNetworkStatus } from '../../hooks/useNetworkStatus'; // Dibiarkan karena digunakan di NetworkStatusBanner
-
+import { Link } from 'react-router-dom'; 
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'; 
 
 // ------------------------------------------------------------------
 // A. ICON & BUTTONS UTILITY
@@ -55,11 +54,11 @@ interface BottomNavbarProps {
 }
 
 export const BottomNavbar: React.FC<BottomNavbarProps> = ({ currentPath, toggleTheme, isDark, isGuest }) => {
-    // isGuest sudah diterima sebagai props, tidak perlu useAuth lagi.
-
+    
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-700">
-            <nav className="max-w-xl mx-auto flex justify-around h-16 pt-2 pb-1">
+            {/* PERBAIKAN: Menambah padding-bottom agar konten terlihat lebih baik di mobile */}
+            <nav className="max-w-xl mx-auto flex justify-around h-16 py-2 pb-safe-bottom"> 
                 <NavItem to="/home" label="Home" currentPath={currentPath} icon={<Icon path="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l-2 2m2-2v10a1 1 0 01-1 1h-3m-6 0h6m-6 0h.01" />} />
                 <NavItem to="/genre" label="Genre" currentPath={currentPath} icon={<Icon path="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m0 0h18" />} />
                 <NavItem to="/favorites" label="Favorit" currentPath={currentPath} icon={<HeartIcon fill={currentPath === 'favorites'} />} />
@@ -92,7 +91,6 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title, showBack = false }) => {
-    // useLocation dihapus karena tidak digunakan
     
     const handleBack = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -100,6 +98,7 @@ export const Header: React.FC<HeaderProps> = ({ title, showBack = false }) => {
     };
 
     return (
+        // PERBAIKAN: Sticky Header agar judul tetap terlihat saat scroll
         <header className="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="max-w-xl mx-auto flex items-center">
                 {showBack && (
@@ -118,7 +117,6 @@ interface NetworkStatusBannerProps {
 }
 
 export const NetworkStatusBanner: React.FC<NetworkStatusBannerProps> = ({ isOnline }) => {
-    // useLocation dihapus karena tidak digunakan
     
     if (isOnline) return null;
 
