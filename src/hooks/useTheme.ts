@@ -1,34 +1,21 @@
-import { useState, useEffect } from 'react';
-
-// Hook untuk mengelola tema (light/dark mode) menggunakan localStorage
+// Hook useTheme yang dimodifikasi menjadi mode terang (light) permanen
 export const useTheme = () => {
-    const getInitialTheme = () => {
-        if (typeof window !== 'undefined' && window.localStorage) {
-            const storedPref = window.localStorage.getItem('theme');
-            if (storedPref) return storedPref;
-            // Default ke preferensi sistem jika tidak ada di localStorage
-            const systemPref = window.matchMedia('(prefers-color-scheme: dark)');
-            if (systemPref.matches) return 'dark';
-        }
-        return 'light'; // Default fallback
-    };
-
-    const [theme, setTheme] = useState(getInitialTheme);
-
-    useEffect(() => {
-        const root = window.document.documentElement;
-        // Hapus class tema lama dan tambahkan tema baru
-        root.classList.remove(theme === 'dark' ? 'light' : 'dark');
-        root.classList.add(theme);
-        // Simpan preferensi ke localStorage
-        localStorage.setItem('theme', theme);
-    }, [theme]);
-
+    // Karena dark mode dihapus, kita set nilai statis:
+    const theme = 'light';
+    const isDark = false;
+    
+    // Fungsi toggleTheme diubah menjadi fungsi kosong
     const toggleTheme = () => {
-        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+        // Tidak melakukan apa-apa karena toggle mode sudah dimatikan
+        console.log("Toggle theme function is disabled.");
     };
 
-    const isDark = theme === 'dark';
-
+    // Opsional: Untuk memastikan <html> tidak memiliki class 'dark'
+    if (typeof window !== 'undefined') {
+        const root = window.document.documentElement;
+        root.classList.remove('dark');
+        root.classList.add('light');
+    }
+    
     return { theme, isDark, toggleTheme };
 };

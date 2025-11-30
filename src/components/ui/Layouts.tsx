@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link, useLocation } from 'react-router-dom'; 
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'; 
 
 // ------------------------------------------------------------------
@@ -27,38 +27,54 @@ interface NavItemProps {
     to: string;
     icon: ReactNode;
     label: string;
-    currentPath: string;
+    currentPath: string; // Tipe ini tetap diperlukan di sini untuk props internal
 }
 
 const NavItem: React.FC<NavItemProps> = ({ to, icon, label, currentPath }) => {
-    const isActive = currentPath === to.replace('/', '');
-    const activeClass = isActive
-        ? 'text-white bg-blue-600 dark:bg-blue-400 dark:text-gray-900 shadow-md'
-        : 'text-gray-500 dark:text-gray-400';
+    
+    const location = useLocation(); 
+    const rootPath = to.split('/')[1] || 'home';
+    const activeRoute = location.pathname.split('/')[1] || 'home';
 
+    const isActive = activeRoute === rootPath;
+
+    const activeClass = isActive
+        ? 'text-white bg-blue-600 dark:bg-blue-600 text-white shadow-lg transition-all'
+        : 'text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors';
+    
     return (
-        <Link to={to} className="flex-1 text-center">
-            <div className={`flex flex-col items-center justify-center p-1 mx-2 transition-all duration-300 rounded-lg ${activeClass}`}>
-                {icon}
-                <span className="text-xs mt-1 font-medium">{label}</span>
+        <Link to={to} className="flex-1 text-center py-2">
+            <div className={`
+                flex flex-col items-center justify-center p-1 mx-2 transition-all duration-300 rounded-xl
+                ${isActive ? activeClass : 'text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors'}
+            `}>
+                <div className={`p-1 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                    {icon}
+                </div>
+                <span className={`text-xs mt-1 font-medium ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                    {label}
+                </span>
             </div>
         </Link>
     );
 };
 
 interface BottomNavbarProps {
-    currentPath: string;
+    // PERBAIKAN: currentPath dihapus dari prop wajib
     toggleTheme: () => void;
     isDark: boolean;
     isGuest: boolean;
 }
 
-export const BottomNavbar: React.FC<BottomNavbarProps> = ({ currentPath, toggleTheme, isDark, isGuest }) => {
+export const BottomNavbar: React.FC<BottomNavbarProps> = ({ toggleTheme, isDark, isGuest }) => {
     
+    const location = useLocation();
+    const currentPath = location.pathname.split('/')[1] || 'home'; // Ambil rute dasar ('home', 'genre', dll)
+
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-700">
-            {/* PERBAIKAN: Menambah padding-bottom agar konten terlihat lebih baik di mobile */}
             <nav className="max-w-xl mx-auto flex justify-around h-16 py-2 pb-safe-bottom"> 
+                {/* Gunakan currentPath yang diambil dari useLocation di NavItem */}
                 <NavItem to="/home" label="Home" currentPath={currentPath} icon={<Icon path="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l-2 2m2-2v10a1 1 0 01-1 1h-3m-6 0h6m-6 0h.01" />} />
                 <NavItem to="/genre" label="Genre" currentPath={currentPath} icon={<Icon path="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m0 0h18" />} />
                 <NavItem to="/favorites" label="Favorit" currentPath={currentPath} icon={<HeartIcon fill={currentPath === 'favorites'} />} />
@@ -98,7 +114,6 @@ export const Header: React.FC<HeaderProps> = ({ title, showBack = false }) => {
     };
 
     return (
-        // PERBAIKAN: Sticky Header agar judul tetap terlihat saat scroll
         <header className="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="max-w-xl mx-auto flex items-center">
                 {showBack && (

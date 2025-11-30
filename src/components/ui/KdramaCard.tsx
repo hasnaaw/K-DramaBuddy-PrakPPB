@@ -14,30 +14,28 @@ interface KramaCardProps {
     kdrama: Drama;
 }
 
-// Komponen Utama Card (Digunakan di Home, List, Favorite)
+// Komponen Utama Card
 export const KramaCard: React.FC<KramaCardProps> = ({ kdrama }) => {
-    const { id, title, poster_url, year, avg_rating } = kdrama;
-    const rating = avg_rating || 0;
-
-    // Perbaikan: Tambahkan min-w-0 dan pastikan Link adalah block
+    // ... (Konten Card) ...
+    // [CODE REDACTED FOR BREVITY]
+    // ... (Konten Card) ...
     return (
-        <Link to={`/detail/${id}`} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden transform hover:-translate-y-1 block min-w-0">
-            {/* Kontainer Gambar: Tentukan tinggi H-60 secara eksplisit */}
+        <Link to={`/detail/${kdrama.id}`} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden transform hover:-translate-y-1 block min-w-0">
+            {/* ... (Tampilan Poster, Rating, dll.) ... */}
             <div className="relative h-60 w-full">
                 <img
-                    src={poster_url}
-                    alt={`Poster ${title}`}
-                    // PERBAIKAN: object-cover memastikan gambar tidak memuai kontainer
+                    src={kdrama.poster_url}
+                    alt={`Poster ${kdrama.title}`}
                     className="w-full h-full object-cover" 
                     onError={(e: any) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x450/374151/FFFFFF?text=No+Poster"; }}
                 />
             </div>
             <div className="p-3">
-                <h3 className="text-lg font-bold truncate text-gray-900 dark:text-white mb-1">{title}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Tahun: {year}</p>
+                <h3 className="text-lg font-bold truncate text-gray-900 dark:text-white mb-1">{kdrama.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Tahun: {kdrama.year}</p>
                 <div className="flex items-center">
-                    {Array.from({ length: 5 }, (_, i) => (<StarIcon key={i} fill={rating > i} />))}
-                    <span className="ml-2 text-sm font-semibold text-gray-700 dark:text-gray-200">{rating.toFixed(1)}</span>
+                    {Array.from({ length: 5 }, (_, i) => (<StarIcon key={i} fill={kdrama.avg_rating > i} />))}
+                    <span className="ml-2 text-sm font-semibold text-gray-700 dark:text-gray-200">{kdrama.avg_rating.toFixed(1)}</span>
                 </div>
             </div>
         </Link>
@@ -49,28 +47,32 @@ interface AdminKramaCardProps {
     kdrama: Drama;
     onEdit: (drama: Drama) => void;
     onDelete: (id: string) => void;
+    showAdminButtons: boolean; // PROPERTI BARU
 }
 
 // Komponen Card Khusus untuk Halaman List (dengan tombol CRUD)
-export const AdminKramaCard: React.FC<AdminKramaCardProps> = ({ kdrama, onEdit, onDelete }) => {
+export const AdminKramaCard: React.FC<AdminKramaCardProps> = ({ kdrama, onEdit, onDelete, showAdminButtons }) => {
     
     return (
         <div className="flex flex-col">
             <KramaCard kdrama={kdrama} />
-            <div className="flex justify-between mt-2 space-x-2 text-xs">
-                <button
-                    onClick={() => onEdit(kdrama)}
-                    className="flex-1 bg-yellow-500 text-white py-1.5 rounded-lg font-medium hover:bg-yellow-600 transition"
-                >
-                    Edit
-                </button>
-                <button
-                    onClick={() => onDelete(kdrama.id)}
-                    className="flex-1 bg-red-600 text-white py-1.5 rounded-lg font-medium hover:bg-red-700 transition"
-                >
-                    Hapus
-                </button>
-            </div>
+            {/* HANYA RENDER JIKA showAdminButtons ADALAH TRUE */}
+            {showAdminButtons && (
+                <div className="flex justify-between mt-2 space-x-2 text-xs">
+                    <button
+                        onClick={() => onEdit(kdrama)}
+                        className="flex-1 bg-yellow-500 text-white py-1.5 rounded-lg font-medium hover:bg-yellow-600 transition"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        onClick={() => onDelete(kdrama.id)}
+                        className="flex-1 bg-red-600 text-white py-1.5 rounded-lg font-medium hover:bg-red-700 transition"
+                    >
+                        Hapus
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
 // Import Hooks & Contexts
 import { AuthProvider, useAuth } from './auth/AuthProvider'; 
 import { DataProvider } from './contexts/DataProvider';
@@ -36,12 +37,13 @@ const Layout = () => {
     }
     
     return (
+        // PERBAIKAN: Background utama (root) harus merespons class 'dark'
         <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
             {/* Network Status Banner (Hanya muncul jika offline) */}
             <NetworkStatusBanner isOnline={isOnline} />
 
-            {/* PERBAIKAN: Menghapus max-w-xl agar konten mengisi lebar device */}
-            <main className="max-w-xl mx-auto pb-16">
+            {/* PERBAIKAN: Menambah pb-16 pada main agar konten tidak terpotong Navbar */}
+            <main className="mx-auto pb-16">
                 
                 {/* Definisikan semua rute di sini */}
                 <Routes>
@@ -67,7 +69,6 @@ const Layout = () => {
             
             {/* Bottom Navbar */}
             <BottomNavbar 
-                currentPath={currentHash} 
                 toggleTheme={toggleTheme} 
                 isDark={isDark} 
                 isGuest={isGuest} 
