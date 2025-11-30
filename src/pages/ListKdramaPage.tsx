@@ -1,27 +1,27 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { DataContext } from '../contexts/DataProvider';
 import { SectionTitle, SkeletonCard } from '../components/ui/Layouts';
 import { AdminKramaCard } from '../components/ui/KdramaCard';
-import type { Drama } from '../contexts/DataProvider'; // Import tipe Drama
+
 
 // ... (Interface Drama dihilangkan karena sudah diimport)
 
 const ListKdramaPage: React.FC = () => {
     const { kdramas, dataLoading } = useContext(DataContext)!;
   
-    const [submissionError, setSubmissionError] = useState<string | null>(null);
+    //const [submissionError, setSubmissionError] = useState<string | null>(null);
 
     // --- Logika CRUD DUMMY (Sesuai permintaan Anda, tidak ada CRUD untuk pengguna) ---
 
    
     
-    const handleEdit = (drama: Drama) => {
-        setSubmissionError("Akses Ditolak: Hanya kreator yang dapat memodifikasi list.");
-    }
-    
-    const handleDelete = async (dramaId: string) => {
-        setSubmissionError("Akses Ditolak: Hanya kreator yang dapat memodifikasi list.");
-    }
+    const handleEdit = () => {
+    // belum dipakai
+};
+
+const handleDelete = async () => {
+    // belum dipakai
+};
     
 
 
@@ -52,11 +52,7 @@ const ListKdramaPage: React.FC = () => {
                 <p className="text-sm text-gray-500 dark:text-gray-400">List dikelola oleh kreator.</p> 
             </div>
 
-            {submissionError && (
-                <p className="text-red-600 dark:text-red-400 mb-4 p-3 bg-red-100 dark:bg-red-900/50 rounded-lg">
-                    {submissionError}
-                </p>
-            )}
+            
 
             {dataLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
