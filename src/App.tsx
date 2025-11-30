@@ -1,9 +1,8 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import React from 'react';
 // Import Hooks & Contexts
 import { AuthProvider, useAuth } from './auth/AuthProvider'; 
 import { DataProvider } from './contexts/DataProvider';
-import { useTheme } from './hooks/useTheme';
+import { useTheme } from './hooks/useTheme.ts';
 import { useNetworkStatus } from './hooks/useNetworkStatus';
 // Import Komponen UI Dasar
 import { BottomNavbar, NetworkStatusBanner } from './components/ui/Layouts'; 
@@ -25,7 +24,7 @@ const Layout = () => {
     const { isGuest, loading: authLoading } = useAuth();
     
     // Mendapatkan hash saat ini untuk BottomNavbar
-    const currentHash = window.location.hash.substring(1).split('/')[0] || 'home';
+    //const currentHash = window.location.hash.substring(1).split('/')[0] || 'home';
 
     // Tampilkan loading screen jika Auth belum siap
     if (authLoading) {

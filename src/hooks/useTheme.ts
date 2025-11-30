@@ -17,5 +17,5 @@ export const useTheme = () => {
         root.classList.add('light');
     }
     
-    return { theme, isDark, toggleTheme };
+    return { theme, isDark, toggleTheme };
 };

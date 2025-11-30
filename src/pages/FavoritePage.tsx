@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts';
+import { SectionTitle, SkeletonCard } from '../components/ui/Layouts';
 import { KramaCard } from '../components/ui/KdramaCard';
 import { useAuth } from '../auth/AuthProvider';
 
@@ -12,8 +12,22 @@ const FavoritePage: React.FC = () => {
     const favoriteKdramas = kdramas.filter(drama => favoriteDramaIds.includes(drama.id));
 
     return (
-        <div className="p-4 pt-16 mb-20">
-            <Header title="K-Drama Favorit Saya" showBack={false} />
+            <div>
+            {/* HEADER PUTIH + NAVY + LOGO */}
+ <div className="w-full bg-white text-[#0A1A3F] shadow-sm fixed top-0 left-0 z-50">
+    {/* Dihapus: max-w-screen-xl dan mx-auto */}
+    <div className="px-4 py-3 flex items-center gap-3">
+        <img
+            src="https://i.pinimg.com/736x/6c/8b/36/6c8b3663b25d1737b3a818ab64a903d1.jpg"
+            alt="Logo"
+            className="w-8 h-8 object-contain"
+        />
+        <h1 className="text-xl font-bold">K-Drama Favorit</h1>
+    </div>
+</div>
+ {/* SPACER BIAR KONTEN GAK KETUTUP HEADER */}
+            <div className="pt-20"></div>
+
             <SectionTitle title="Daftar K-Drama yang Ditandai" />
 
             {isGuest && (

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { DataContext } from '../contexts/DataProvider.tsx';
-import { Header, SectionTitle } from '../components/ui/Layouts.tsx';
+import { SectionTitle } from '../components/ui/Layouts.tsx';
 import { useAuth } from '../auth/AuthProvider.tsx';
 import { ReviewModal } from '../components/modals/ReviewModal.tsx'; // PERBAIKAN: Memperbaiki import path
 
@@ -91,8 +91,22 @@ const CommunityReviewPage: React.FC = () => {
     };
 
     return (
-        <div className="p-4 pt-16 mb-20">
-            <Header title="Komunitas Review" showBack={false} />
+           <div>
+            {/* HEADER PUTIH + NAVY + LOGO */}
+ <div className="w-full bg-white text-[#0A1A3F] shadow-sm fixed top-0 left-0 z-50">
+    {/* Dihapus: max-w-screen-xl dan mx-auto */}
+    <div className="px-4 py-3 flex items-center gap-3">
+        <img
+            src="https://i.pinimg.com/736x/71/26/7e/71267e196665cb6a2e48310bcf87f2c7.jpg"
+            alt="Logo"
+            className="w-8 h-8 object-contain"
+        />
+        <h1 className="text-xl font-bold">Komunitas Review</h1>
+    </div>
+</div>
+ {/* SPACER BIAR KONTEN GAK KETUTUP HEADER */}
+            <div className="pt-20"></div>
+
             <SectionTitle title="Semua Review Pengguna" />
 
             {isGuest && (

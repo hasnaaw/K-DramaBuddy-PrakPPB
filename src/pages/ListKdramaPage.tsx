@@ -1,27 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { DataContext } from '../contexts/DataProvider';
-import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts';
+import { SectionTitle, SkeletonCard } from '../components/ui/Layouts';
 import { AdminKramaCard } from '../components/ui/KdramaCard';
-import { KdramaFormModal } from '../components/modals/KdramaFormModal';
-import { useAuth } from '../auth/AuthProvider';
 import type { Drama } from '../contexts/DataProvider'; // Import tipe Drama
 
 // ... (Interface Drama dihilangkan karena sudah diimport)
 
 const ListKdramaPage: React.FC = () => {
-    const { kdramas, dataLoading, addOrUpdateKdrama, deleteKdrama } = useContext(DataContext)!;
-    const { isGuest } = useAuth(); 
-    
-    const [isFormModalOpen, setIsFormModalOpen] = useState(false); 
-    const [editingDrama, setEditingDrama] = useState<Drama | null>(null); 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { kdramas, dataLoading } = useContext(DataContext)!;
+  
     const [submissionError, setSubmissionError] = useState<string | null>(null);
 
     // --- Logika CRUD DUMMY (Sesuai permintaan Anda, tidak ada CRUD untuk pengguna) ---
 
-    const handleFormSubmit = async (dramaData: Partial<Drama>) => {
-        setSubmissionError("Akses Ditolak: Hanya kreator yang dapat memodifikasi list.");
-    }
+   
     
     const handleEdit = (drama: Drama) => {
         setSubmissionError("Akses Ditolak: Hanya kreator yang dapat memodifikasi list.");
@@ -31,16 +23,28 @@ const ListKdramaPage: React.FC = () => {
         setSubmissionError("Akses Ditolak: Hanya kreator yang dapat memodifikasi list.");
     }
     
-    const handleOpenAddModal = () => {
-        setSubmissionError("Akses Ditolak: Hanya kreator yang dapat memodifikasi list.");
-    }
+
 
     // --- PENGHAPUSAN TOMBOL DAN KONTROL UI ---
 
     return (
         // PERBAIKAN: Pastikan container utama halaman tidak memiliki warna latar belakang permanen (biarkan App.tsx mengontrol warna root)
-        <div className="p-4 pt-16 mb-20"> 
-            <Header title="Semua K-Drama" showBack={true} />
+          <div>
+            {/* HEADER PUTIH + NAVY + LOGO */}
+ <div className="w-full bg-white text-[#0A1A3F] shadow-sm fixed top-0 left-0 z-50">
+    {/* Dihapus: max-w-screen-xl dan mx-auto */}
+    <div className="px-4 py-3 flex items-center gap-3">
+        <img
+            src="https://i.pinimg.com/736x/64/20/24/642024b9d48c4380592c966c355963ae.jpg"
+            alt="Logo"
+            className="w-8 h-8 object-contain"
+        />
+        <h1 className="text-xl font-bold">Semua K-Drama</h1>
+    </div>
+</div>
+ {/* SPACER BIAR KONTEN GAK KETUTUP HEADER */}
+            <div className="pt-20"></div>
+
             <div className="flex justify-between items-center mb-6">
                 <SectionTitle title="Daftar Lengkap" />
                 

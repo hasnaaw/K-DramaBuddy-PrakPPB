@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { DataContext } from '../contexts/DataProvider.tsx';
-import { Header, SectionTitle, SkeletonCard } from '../components/ui/Layouts.tsx';
+import { SkeletonCard } from '../components/ui/Layouts.tsx';
 import { KramaCard } from '../components/ui/KdramaCard.tsx';
 
 const ActorDetailPage: React.FC = () => {
@@ -17,9 +17,17 @@ const ActorDetailPage: React.FC = () => {
     );
     
     return (
-        <div className="p-4 pt-16 mb-20">
-            <Header title={`Filmografi ${decodedActorName}`} showBack={true} />
-            <SectionTitle title={`Semua K-Drama oleh ${decodedActorName}`} />
+        <div>
+            {/* HEADER PUTIH + NAVY + LOGO */}
+ <div className="w-full bg-white text-[#0A1A3F] shadow-sm fixed top-0 left-0 z-50">
+    {/* Dihapus: max-w-screen-xl dan mx-auto */}
+    <div className="px-4 py-3 flex items-center gap-3">
+         <h1 className="text-xl font-bold">K-Drama {decodedActorName}</h1>
+    </div>
+</div>
+
+            {/* SPACER BIAR KONTEN GAK KETUTUP HEADER */}
+            <div className="pt-20"></div>
             
             {dataLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

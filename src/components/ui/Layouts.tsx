@@ -1,7 +1,7 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom'; 
-import { useNetworkStatus } from '../../hooks/useNetworkStatus'; 
+
 
 // ------------------------------------------------------------------
 // A. ICON & BUTTONS UTILITY
@@ -20,7 +20,7 @@ const HeartIcon = ({ fill, size = 20 }: { fill: boolean, size?: number }) => (
 );
 
 // ------------------------------------------------------------------
-// B. BOTTOM NAVIGATION BAR
+// B. BOTTOM NAVIGATION BAR (FIXED)
 // ------------------------------------------------------------------
 
 interface NavItemProps {
@@ -30,7 +30,7 @@ interface NavItemProps {
     currentPath: string; // Tipe ini tetap diperlukan di sini untuk props internal
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, icon, label, currentPath }) => {
+const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => {
     
     const location = useLocation(); 
     const rootPath = to.split('/')[1] || 'home';
@@ -38,20 +38,30 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label, currentPath }) => {
 
     const isActive = activeRoute === rootPath;
 
-    const activeClass = isActive
-        ? 'text-white bg-blue-600 dark:bg-blue-600 text-white shadow-lg transition-all'
-        : 'text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors';
+    // Kelas dasar untuk membuat wrapper mengisi ruang Link
+    const baseClasses = "flex flex-col items-center justify-center w-full h-full transition-all duration-300";
     
+    // Kelas untuk status aktif dan tidak aktif
+    const activeStyle = 'bg-blue-600 shadow-lg text-white';
+    const inactiveStyle = 'text-gray-500 dark:text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700';
+
     return (
-        <Link to={to} className="flex-1 text-center py-2">
+        // Link dibuat fleksibel (flex-1) untuk membagi ruang merata, dan px-1 untuk jarak antar tombol
+        <Link to={to} className="flex-1 px-1 flex justify-center items-center">
             <div className={`
-                flex flex-col items-center justify-center p-1 mx-2 transition-all duration-300 rounded-xl
-                ${isActive ? activeClass : 'text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors'}
+                ${baseClasses} 
+                py-1 rounded-xl 
+                ${isActive ? activeStyle : inactiveStyle}
             `}>
-                <div className={`p-1 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                {/* Kontainer ikon. Warna diwarisi dari parent div NavItem */}
+                <div className={`w-6 h-6 flex items-center justify-center`}>
                     {icon}
                 </div>
-                <span className={`text-xs mt-1 font-medium ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+
+                {/* Kontainer Label. Warna diwarisi dari parent div NavItem */}
+                <span className={`
+                    text-xs mt-0.5 font-medium 
+                `}>
                     {label}
                 </span>
             </div>
@@ -66,31 +76,33 @@ interface BottomNavbarProps {
     isGuest: boolean;
 }
 
-export const BottomNavbar: React.FC<BottomNavbarProps> = ({ toggleTheme, isDark, isGuest }) => {
+export const BottomNavbar: React.FC<BottomNavbarProps> = ({ toggleTheme }) => {
     
     const location = useLocation();
     const currentPath = location.pathname.split('/')[1] || 'home'; // Ambil rute dasar ('home', 'genre', dll)
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-700">
-            <nav className="max-w-xl mx-auto flex justify-around h-16 py-2 pb-safe-bottom"> 
+            {/* Mengubah py-2 menjadi py-1 untuk tampilan yang lebih compact pada tombol */}
+            <nav className="max-w-xl mx-auto flex justify-around h-16 py-1 pb-safe-bottom"> 
                 {/* Gunakan currentPath yang diambil dari useLocation di NavItem */}
                 <NavItem to="/home" label="Home" currentPath={currentPath} icon={<Icon path="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l-2 2m2-2v10a1 1 0 01-1 1h-3m-6 0h6m-6 0h.01" />} />
-                <NavItem to="/genre" label="Genre" currentPath={currentPath} icon={<Icon path="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m0 0h18" />} />
+                <NavItem to="/genre" label="Genre" currentPath={currentPath} icon={<Icon path="M3 4h18l-7 8v6l-4 2v-8l-7-8z" />} />
                 <NavItem to="/favorites" label="Favorit" currentPath={currentPath} icon={<HeartIcon fill={currentPath === 'favorites'} />} />
-                <NavItem to="/community" label="Komunitas" currentPath={currentPath} icon={<Icon path="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1m-1 0a4 4 0 014 4v9a4 4 0 01-4 4" />} />
-                <NavItem to="/profile" label="Profil" currentPath={currentPath} icon={<Icon path="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />} />
+                <NavItem to="/community" label="Komunitas" currentPath={currentPath} 
+                        icon={<Icon path="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2
+M14 10a4 4 0 11-8 0 4 4 0 018 0
+M23 21v-2a4 4 0 00-3-3.87
+M20 7a3 3 0 11-6 0 3 3 0 016 0" />} />
+                <NavItem to="/profile" label="Profil" currentPath={currentPath} 
+                        icon={<Icon path="M12 14c4.418 0 8 1.79 8 4v2H4v-2c0-2.21 3.582-4 8-4z
+M12 12a4 4 0 100-8 4 4 0 000 8z" />} />
 
                 {/* Tombol Dark/Light Mode (Desktop/Large Screen Only) */}
                 <button 
                     onClick={toggleTheme} 
-                    className="hidden md:flex ml-4 p-2 self-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full transition-colors"
+                    // className="hidden md:flex ml-4 p-2 self-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full transition-colors"
                 >
-                    {isDark ? (
-                        <Icon path="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
-                    ) : (
-                        <Icon path="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-                    )}
                 </button>
             </nav>
         </div>

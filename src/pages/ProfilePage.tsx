@@ -2,8 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider.tsx';
 import { DataContext } from '../contexts/DataProvider.tsx';
-import { Header, SectionTitle } from '../components/ui/Layouts.tsx';
+import { SectionTitle } from '../components/ui/Layouts.tsx';
 import { ReviewModal } from '../components/modals/ReviewModal.tsx';
+import Avatar from "../components/Avatar.tsx";
+
 
 // Asumsi tipe dasar
 interface Review {
@@ -49,7 +51,7 @@ const ReviewItem: React.FC<{ review: Review, isOwnReview: boolean, onDelete: (id
 
 
 const ProfilePage: React.FC = () => {
-    const { user, userEmail, isGuest, logout, loading, userId } = useAuth();
+    const { userEmail, isGuest, logout, loading, userId } = useAuth();
     const { reviews, dataLoading, deleteReview, addOrUpdateReview } = useContext(DataContext)!;
     
     // Filter review milik pengguna saat ini
@@ -90,35 +92,85 @@ const ProfilePage: React.FC = () => {
     if (loading) return <div className="p-4 pt-16 mb-20 text-center">Memuat profil...</div>;
 
     return (
-        <div className="p-4 pt-16 mb-20">
-            <Header title="Profil Saya" showBack={false} />
+        <div>
+  <div>
+            {/* HEADER PUTIH + NAVY + LOGO */}
+ <div className="w-full bg-white text-[#0A1A3F] shadow-sm fixed top-0 left-0 z-50">
+    {/* Dihapus: max-w-screen-xl dan mx-auto */}
+    <div className="px-4 py-3 flex items-center gap-3">
+        <img
+            src="https://i.pinimg.com/736x/d9/7b/bb/d97bbb08017ac2309307f0822e63d082.jpg"
+            alt="Logo"
+            className="w-8 h-8 object-contain"
+        />
+        <h1 className="text-xl font-bold">Profil Saya</h1>
+    </div>
+</div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-8">
-                <SectionTitle title="Informasi Akun" />
-                {isGuest ? (
-                    <>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">Anda masuk sebagai: <span className="text-blue-600 dark:text-blue-400">Tamu</span></p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Masuk untuk menyimpan review Anda.</p>
-                        <p className="text-xs mt-4 text-gray-400">ID Pengguna Sementara: {userId}</p>
-                        <Link to="/login" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
-                            Masuk / Daftar
-                        </Link>
-                    </>
-                ) : (
-                    <>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">Email: <span className="text-blue-600 dark:text-blue-400">{userEmail}</span></p>
-                        <p className="text-md text-gray-700 dark:text-gray-300 mt-2">Status: Akun Terautentikasi</p>
-                        <p className="text-xs mt-4 text-gray-400">ID Pengguna: {userId}</p>
-                        <button
-                            onClick={async () => { if (window.confirm("Apakah Anda yakin ingin keluar?")) await logout(); }}
-                            className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
-                        >
-                            Logout
-                        </button>
-                    </>
-                )}
+            {/* SPACER BIAR KONTEN GAK KETUTUP HEADER */}
+            <div className="pt-20"></div>
+    
+    {isGuest ? (
+        <>
+            <div className="flex flex-col items-center text-center">
+                {/* Default Avatar Tamu */}
+                <img
+                    src="https://ui-avatars.com/api/?name=Tamu&background=0A1A3F&color=fff&size=128"
+                    alt="Avatar Tamu"
+                    className="w-24 h-24 rounded-full mb-4 shadow"
+                />
+
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Anda masuk sebagai: <span className="text-blue-600 dark:text-blue-400">Tamu</span>
+                </p>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Masuk untuk menyimpan review Anda.
+                </p>
+
+                <p className="text-xs mt-3 text-gray-400">
+                    ID Pengguna Sementara: {userId}
+                </p>
+
+                <Link
+                    to="/login"
+                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                >
+                    Masuk / Daftar
+                </Link>
             </div>
+        </>
+    ) : (
+        <>
+            <div className="flex flex-col items-center text-center">
 
+                {/* Avatar Email (Gravatar) */}
+                <Avatar email={userEmail!} size={90} />
+
+                <p className="text-lg font-semibold text-gray-900 dark:text-white mt-4">
+                    {userEmail}
+                </p>
+
+                <p className="text-md text-gray-700 dark:text-gray-300 mt-1">
+                    Status: Akun Terautentikasi
+                </p>
+
+                <p className="text-xs mt-3 text-gray-400">
+                    ID Pengguna: {userId}
+                </p>
+
+                <button
+                    onClick={async () => {
+                        if (window.confirm("Apakah Anda yakin ingin keluar?")) await logout();
+                    }}
+                    className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+                >
+                    Logout
+                </button>
+            </div>
+        </>
+    )}
+</div>
             <SectionTitle title="Daftar Review Milik Saya" />
             {dataLoading ? (
                 <div className="text-center p-8 text-gray-500">Memuat review Anda...</div>
